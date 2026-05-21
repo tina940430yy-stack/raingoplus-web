@@ -127,14 +127,15 @@
     .ticket::before, .ticket::after { content: ''; position: absolute; top: 50%; width: 16px; height: 16px; background-color: white; border-radius: 50%; transform: translateY(-50%); }
     .ticket::before { left: -8px; } .ticket::after { right: -8px; }
     
-    .bg-blue { background-color: #7998a6; } 
-    .bg-pink { background-color: #b5828d; } 
-    .bg-yellow { background-color: #cbb274; color: #fff; } 
-    .bg-green { background-color: #8da384; }
-    .bg-red { background-color: #ba6b66; } 
-    .bg-orange { background-color: #c28f68; } 
-    .bg-teal { background-color: #6f9da0; } 
-    .bg-dark-green { background-color: #628076; }
+    /* ★ 修正：淺色系莫蘭迪配色 */
+    .bg-blue { background-color: #A2B5CD; } 
+    .bg-pink { background-color: #D4A8B4; } 
+    .bg-yellow { background-color: #DDC696; color: #333; } /* 淺莫蘭迪黃搭深字 */
+    .bg-green { background-color: #B3C6A9; }
+    .bg-red { background-color: #CD9A98; } 
+    .bg-orange { background-color: #D4B298; } 
+    .bg-teal { background-color: #9BBEC1; } 
+    .bg-dark-green { background-color: #9BAEA6; }
 
     .card-brand { font-size: 12px; font-weight: bold; color: #7f9774; text-align: left; }
 
@@ -157,7 +158,7 @@
     .drop-label { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-weight: bold; font-size: 18px; color: #333; z-index: 5; }
     .charity-footer { padding: 20px; padding-bottom: calc(30px + env(safe-area-inset-bottom)); border-top: 1px solid #eee; background: #f9f9f9; display: flex; justify-content: space-between; align-items: center; position: relative; }
     .footer-circle-btn { width: 50px; height: 50px; border-radius: 50%; background: white; border: 1px solid #eee; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--text-dark); cursor: pointer; }
-    .btn-charity-donate { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 160px; height: 100px; background: var(--btn-green); border: 4px solid white; border-radius: 80px 80px 0 0; padding-top: 25px; font-size: 18px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); z-index: 30; text-align: center; }
+    .btn-charity-donate { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 160px; height: 100px; background: var(--btn-green); border: 4px solid white; border-radius: 80px 80px 0 0; padding-top: 25px; font-size: 18px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0 -4px 10px rgba(0,0,0,0.1); z-index: 30; text-align: center; border-bottom: none;}
 
     /* ==================== 視圖 4：優惠詳細頁 ==================== */
     .detail-container { padding: 20px; padding-bottom: 100px; }
@@ -172,7 +173,7 @@
     .btn-primary { width: 100%; background-color: var(--btn-green); color: #333; border: none; border-radius: 25px; padding: 15px 0; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
     /* ==================== 彈窗系列 (共用樣式) ==================== */
-    .overlay-panel { position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background-color: #e0f2e6; border-radius: 30px 30px 0 0; z-index: 50; transition: bottom 0.3s; display: flex; flex-direction: column; }
+    .overlay-panel { position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background-color: #e0f2e6; border-radius: 30px 30px 0 0; z-index: 500; transition: bottom 0.3s; display: flex; flex-direction: column; }
     .overlay-panel.active { bottom: 0; }
     .overlay-header { padding: 15px 20px; display: flex; justify-content: flex-end; align-items: center; }
     .btn-close-overlay { background: none; border: none; font-size: 24px; cursor: pointer; color: #333;}
@@ -270,25 +271,91 @@
     .scanner-frame-inner::before { top: -2px; right: -2px; border-width: 4px 4px 0 0; border-top-right-radius: 20px; }
     .scanner-frame-inner::after { bottom: -2px; left: -2px; border-width: 0 0 4px 4px; border-bottom-left-radius: 20px; }
     .scanner-tip { position: absolute; bottom: 20%; left: 0; width: 100%; text-align: center; color: white; font-size: 16px; z-index: 20; }
+
+    /* ==================== ★ 新增：側邊欄與 Info 彈窗樣式 ==================== */
+    .app-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; display: none; opacity: 0; transition: opacity 0.3s; }
+    .app-overlay.active { display: block; opacity: 1; }
+
+    /* 左右側邊欄 */
+    .sidebar { position: absolute; top: 0; width: 75%; height: 100%; background: white; z-index: 200; transition: transform 0.3s ease; display: flex; flex-direction: column; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
+    .sidebar.left { left: 0; transform: translateX(-100%); border-right: 1px solid #eee; }
+    .sidebar.right { right: 0; transform: translateX(100%); border-left: 1px solid #eee; }
+    .sidebar.active { transform: translateX(0); }
+
+    /* 側邊欄內部樣式 */
+    .sidebar-profile-header { padding: 40px 20px 30px 20px; background: var(--primary-green); color: #333; display: flex; align-items: center; gap: 15px; }
+    .sidebar-avatar { width: 60px; height: 60px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; color: #7f9774; }
+    .sidebar-menu-list { flex: 1; overflow-y: auto; padding: 20px 0; }
+    .sidebar-menu-item { padding: 15px 25px; font-size: 16px; font-weight: bold; color: #333; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+    .sidebar-menu-item:active { background: #f9f9f9; }
+    .sidebar-menu-item i { width: 20px; text-align: center; color: #888; }
+    
+    .notify-header { padding: 20px; text-align: center; border-bottom: 1px solid #eee; font-weight: bold; font-size: 18px; }
+    .notify-empty { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #999; gap: 15px; font-weight: bold; }
+
+    /* Info 置中彈窗 */
+    .center-modal-wrap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; justify-content: center; align-items: center; z-index: 300; }
+    .center-modal-wrap.active { display: flex; }
+    .center-modal { background: white; width: 85%; border-radius: 20px; padding: 30px 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.15); animation: popIn 0.3s ease-out; }
+    .center-modal h3 { margin: 0 0 15px 0; color: #333; line-height: 1.5; }
+    .center-modal p { margin: 0 0 25px 0; color: #666; font-size: 15px; line-height: 1.6; }
+    .center-modal button { background: var(--btn-green); color: #333; border: none; padding: 12px 40px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
   </style>
 </head>
 <body>
 
   <div id="app-container">
     
+    <div id="app-overlay" class="app-overlay" onclick="closeAllModals()"></div>
+
+    <div id="sidebar-left" class="sidebar left">
+      <div class="sidebar-profile-header">
+        <div class="sidebar-avatar">郁</div>
+        <div>
+          <div style="font-size: 20px; font-weight: bold;">陳郁庭</div>
+          <div style="font-size: 14px; margin-top: 5px;">一般會員</div>
+        </div>
+      </div>
+      <div class="sidebar-menu-list">
+        <div class="sidebar-menu-item"><i class="fa-solid fa-user"></i> 個人檔案</div>
+        <div class="sidebar-menu-item"><i class="fa-solid fa-list-ul"></i> 租借紀錄</div>
+        <div class="sidebar-menu-item"><i class="fa-solid fa-credit-card"></i> 綁定支付</div>
+        <div class="sidebar-menu-item"><i class="fa-solid fa-circle-question"></i> 幫助中心</div>
+        <div class="sidebar-menu-item"><i class="fa-solid fa-circle-info"></i> 關於 RAINGO</div>
+      </div>
+    </div>
+
+    <div id="sidebar-right" class="sidebar right">
+      <div class="notify-header">通知中心</div>
+      <div class="notify-empty">
+        <i class="fa-regular fa-bell-slash" style="font-size: 50px; color: #ddd;"></i>
+        <span>暫無任何通知!</span>
+      </div>
+    </div>
+
+    <div id="info-modal" class="center-modal-wrap">
+      <div class="center-modal">
+        <h3>晴雨無阻 共傘永續<br><span style="font-size: 16px; color: #7f9774;">raingo 撐出你的行動派</span></h3>
+        <p>新型態共享傘租借平台<br>陪你在行動自如的城市生活中減少浪費</p>
+        <button onclick="closeAllModals()">我知道了</button>
+      </div>
+    </div>
+
     <div id="view-map" class="page-view active">
       <div id="map" class="map-bg"></div>
       
       <div class="ui-layer">
         <div class="top-search-bar">
-          <button class="menu-btn" onclick="alert('開啟側邊欄')"><i class="fa-solid fa-bars"></i></button>
+          <button class="menu-btn" onclick="openMenu()"><i class="fa-solid fa-bars"></i></button>
           <input type="text" class="search-input" placeholder="輸入租借站名">
-          <button class="bell-btn" onclick="alert('開啟通知')"><i class="fa-solid fa-bell"></i></button>
+          <button class="bell-btn" onclick="openNotify()"><i class="fa-solid fa-bell"></i></button>
         </div>
         <div class="floating-top-left">
           <div class="row-btns">
             <button class="pill-btn" onclick="openNearbySpots()"><i class="fa-solid fa-umbrella"></i> 可借</button>
-            <button class="circle-btn"><i class="fa-solid fa-info"></i></button>
+            <button class="circle-btn" onclick="openInfoModal()"><i class="fa-solid fa-info"></i></button>
           </div>
           <button class="circle-btn" style="margin-top: 5px;" onclick="centerToTaipei()"><i class="fa-solid fa-location-arrow" style="transform: rotate(-45deg);"></i></button>
         </div>
@@ -309,34 +376,13 @@
         <button class="btn-close-overlay" onclick="closeNearbySpots()"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <div class="nearby-content">
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M6出口</div>
-          <div class="nearby-status"><span class="text-green">可借 7</span> | <span class="text-gray-dark">可還 19</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M5出口</div>
-          <div class="nearby-status"><span class="text-green">可借 12</span> | <span class="text-gray-dark">可還 5</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M4出口</div>
-          <div class="nearby-status"><span class="text-red">可借 0</span> | <span class="text-gray-dark">可還 22</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M8出口</div>
-          <div class="nearby-status"><span class="text-green">可借 5</span> | <span class="text-gray-dark">可還 10</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M7出口</div>
-          <div class="nearby-status"><span class="text-green">可借 3</span> | <span class="text-gray-dark">可還 15</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M1出口</div>
-          <div class="nearby-status"><span class="text-green">可借 8</span> | <span class="text-gray-dark">可還 8</span></div>
-        </div>
-        <div class="nearby-item">
-          <div class="nearby-name">捷運台北車站M2出口</div>
-          <div class="nearby-status"><span class="text-green">可借 20</span> | <span class="text-gray-dark">可還 2</span></div>
-        </div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M6出口</div><div class="nearby-status"><span class="text-green">可借 7</span> | <span class="text-gray-dark">可還 19</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M5出口</div><div class="nearby-status"><span class="text-green">可借 12</span> | <span class="text-gray-dark">可還 5</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M4出口</div><div class="nearby-status"><span style="color:#e44d42; margin-right:10px;">可借 0</span> | <span class="text-gray-dark">可還 22</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M8出口</div><div class="nearby-status"><span class="text-green">可借 5</span> | <span class="text-gray-dark">可還 10</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M7出口</div><div class="nearby-status"><span class="text-green">可借 3</span> | <span class="text-gray-dark">可還 15</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M1出口</div><div class="nearby-status"><span class="text-green">可借 8</span> | <span class="text-gray-dark">可還 8</span></div></div>
+        <div class="nearby-item"><div class="nearby-name">捷運台北車站M2出口</div><div class="nearby-status"><span class="text-green">可借 20</span> | <span class="text-gray-dark">可還 2</span></div></div>
       </div>
     </div>
 
@@ -346,16 +392,16 @@
         <div class="header-points"><i class="fa-solid fa-droplet icon-drop"></i> 700</div>
       </div>
       <div class="coupon-grid">
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #6c8a9c;">我家 FamilyMart</div><div class="ticket bg-blue">現金抵用券</div><div class="card-title">我家 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #a6717a;">POYA 寶雅</div><div class="ticket bg-pink">現金抵用券</div><div class="card-title">寶雅 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #b89d5b;">小南百貨</div><div class="ticket bg-yellow">現金抵用券</div><div class="card-title">小南百貨 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="font-weight:900; color: #7f9774;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶兩千 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #6c8a9c;">全聯福利中心</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">全聯 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #819e7a;">7-ELEVEN</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">7-11 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #b88557;">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #669799;">屈臣氏</div><div class="ticket bg-teal">現金抵用券</div><div class="card-title">屈臣氏 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #55756c;">星巴克</div><div class="ticket bg-dark-green">現金抵用券</div><div class="card-title">星巴克 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color: #b3645e;">麥當勞</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麥當勞 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">我家 FamilyMart</div><div class="ticket bg-blue">現金抵用券</div><div class="card-title">我家 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">POYA 寶雅</div><div class="ticket bg-pink">現金抵用券</div><div class="card-title">寶雅 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">小南百貨</div><div class="ticket bg-yellow">現金抵用券</div><div class="card-title">小南百貨 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="font-weight:900;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶兩千 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">全聯福利中心</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">全聯 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">7-ELEVEN</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">7-11 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">屈臣氏</div><div class="ticket bg-teal">現金抵用券</div><div class="card-title">屈臣氏 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">星巴克</div><div class="ticket bg-dark-green">現金抵用券</div><div class="card-title">星巴克 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">麥當勞</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麥當勞 現金抵用金</div></div>
       </div>
       <button class="charity-entry-btn" onclick="switchView('view-charity')">
         <i class="fa-solid fa-chevron-up"></i>
@@ -436,18 +482,14 @@
       <div class="bottom-action-bar"><button class="btn-primary" onclick="openNumpad()">前往兌換</button></div>
     </div>
 
-    <div id="overlay-numpad" class="overlay-panel">
+    <div id="overlay-numpad" class="overlay-panel" style="z-index: 500;">
       <div class="overlay-header"><button class="btn-close-overlay" onclick="closeNumpad()"><i class="fa-solid fa-xmark"></i></button></div>
       <div class="numpad-content">
         <div class="rules-toggle">兌換規則 <i class="fa-solid fa-chevron-down" style="position:absolute; right:20px; top:15px;"></i></div>
         <div class="numpad-status">當前最多可折抵 5 元</div>
         <div class="input-display">
-          <div class="input-row">
-            <span>本次兌換</span> <div class="amount-box">$ <span id="display-amount"></span></div>
-          </div>
-          <div class="input-row">
-            <span>使用點數</span> <div id="display-points">0 點</div>
-          </div>
+          <div class="input-row"><span>本次兌換</span> <div class="amount-box">$ <span id="display-amount"></span></div></div>
+          <div class="input-row"><span>使用點數</span> <div id="display-points">0 點</div></div>
         </div>
         <div class="numpad-grid">
           <button class="num-key" onclick="inputNum('1')">1</button><button class="num-key" onclick="inputNum('2')">2</button><button class="num-key" onclick="inputNum('3')">3</button>
@@ -500,14 +542,9 @@
     </div>
 
     <div id="view-scanner" class="page-view">
-      <div class="scanner-header">
-        <i class="fa-solid fa-arrow-left" onclick="closeScanner()"></i>
-        <span>掃碼借傘</span>
-      </div>
+      <div class="scanner-header"><i class="fa-solid fa-arrow-left" onclick="closeScanner()"></i><span>掃碼借傘</span></div>
       <video id="camera-stream" autoplay playsinline></video>
-      <div class="scanner-frame">
-        <div class="scanner-frame-inner"></div>
-      </div>
+      <div class="scanner-frame"><div class="scanner-frame-inner"></div></div>
       <div class="scanner-tip">請將 QR Code 對準框內以掃描</div>
     </div>
 
@@ -516,74 +553,70 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
+    // ==================== ★ 側邊欄與視窗控制邏輯 ====================
+    const appOverlay = document.getElementById('app-overlay');
+    const sidebarLeft = document.getElementById('sidebar-left');
+    const sidebarRight = document.getElementById('sidebar-right');
+    const infoModal = document.getElementById('info-modal');
+
+    function openMenu() {
+      appOverlay.classList.add('active');
+      sidebarLeft.classList.add('active');
+    }
+    
+    function openNotify() {
+      appOverlay.classList.add('active');
+      sidebarRight.classList.add('active');
+    }
+
+    function openInfoModal() {
+      appOverlay.classList.add('active');
+      infoModal.classList.add('active');
+    }
+
+    function closeAllModals() {
+      appOverlay.classList.remove('active');
+      sidebarLeft.classList.remove('active');
+      sidebarRight.classList.remove('active');
+      infoModal.classList.remove('active');
+    }
+
     // ==================== 地圖初始化邏輯 ====================
     let map;
     function initMap() {
-      map = L.map('map', {
-        zoomControl: false 
-      }).setView([25.0478, 121.5170], 16);
-
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19
-      }).addTo(map);
-
-      const redIcon = L.divIcon({
-        html: '<div class="pin-icon"><i class="fa-solid fa-umbrella"></i></div>',
-        className: 'leaflet-custom-marker',
-        iconSize: [34, 34],
-        iconAnchor: [17, 34]
-      });
-      
+      map = L.map('map', { zoomControl: false }).setView([25.0478, 121.5170], 16);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+      const redIcon = L.divIcon({ html: '<div class="pin-icon"><i class="fa-solid fa-umbrella"></i></div>', className: 'leaflet-custom-marker', iconSize: [34, 34], iconAnchor: [17, 34] });
       L.marker([25.0478, 121.5170], { icon: redIcon }).addTo(map);
     }
-
-    function centerToTaipei() {
-      if (map) map.setView([25.0478, 121.5170], 16);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      initMap();
-    });
+    function centerToTaipei() { if (map) map.setView([25.0478, 121.5170], 16); }
+    document.addEventListener('DOMContentLoaded', () => { initMap(); });
 
     // ==================== SPA 路由切換邏輯 ====================
     function switchView(viewId) {
       document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
       const targetView = document.getElementById(viewId);
       if (targetView) targetView.classList.add('active');
-      
-      if (viewId === 'view-map' && map) {
-        setTimeout(() => { map.invalidateSize(); }, 50);
-      }
+      if (viewId === 'view-map' && map) setTimeout(() => { map.invalidateSize(); }, 50);
       closeNumpad();
     }
 
-    // ==================== ★ 新增：500M 附近站點邏輯 ====================
-    function openNearbySpots() {
-      document.getElementById('overlay-nearby').classList.add('active');
-    }
-    function closeNearbySpots() {
-      document.getElementById('overlay-nearby').classList.remove('active');
-    }
+    // ==================== 500M 附近站點邏輯 ====================
+    function openNearbySpots() { document.getElementById('overlay-nearby').classList.add('active'); }
+    function closeNearbySpots() { document.getElementById('overlay-nearby').classList.remove('active'); }
 
-    // ==================== ★ 新增：相機掃描器邏輯 ====================
+    // ==================== 相機掃描器邏輯 ====================
     let videoStream = null;
     async function openScanner() {
       switchView('view-scanner');
       const video = document.getElementById('camera-stream');
       try {
-        // 請求開啟後置鏡頭
         videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         video.srcObject = videoStream;
-      } catch (err) {
-        alert("無法存取相機，請確認是否給予權限，或網頁是否處於安全連線 (HTTPS) 環境下。");
-      }
+      } catch (err) { alert("無法存取相機，請確認權限或處於安全連線 (HTTPS) 環境。"); }
     }
     function closeScanner() {
-      if (videoStream) {
-        // 關閉相機串流以節省效能
-        videoStream.getTracks().forEach(track => track.stop());
-        videoStream = null;
-      }
+      if (videoStream) { videoStream.getTracks().forEach(track => track.stop()); videoStream = null; }
       switchView('view-map');
     }
 
