@@ -8,7 +8,8 @@
   <style>
     /* 基礎重置與變數 */
     :root {
-      --primary-green: #d1ebd6; /* 借傘按鈕的薄荷綠 */
+      --primary-green: #d1ebd6; 
+      --btn-green: #a3d9b4; /* 按鈕專用薄荷綠 */
       --text-dark: #333333;
       --text-gray: #888888;
       --marker-red: #e44d42;
@@ -25,42 +26,41 @@
     }
 
     body {
-      background-color: #333; /* 外層深色背景，突顯 App 範圍 */
+      background-color: #333;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
 
-    /* 1. App 容器 (模擬實體手機外框) */
+    /* App 容器 (模擬實體手機外框) */
     #app-container {
-      width: 375px;          /* 鎖定寬度為常見的 iPhone 寬度 */
-      height: 812px;         /* 鎖定高度為常見的 iPhone 高度 */
-      margin: 20px auto;     /* 讓它在電腦螢幕上置中，且上下留一點空間 */
+      width: 375px;          
+      height: 812px;         
+      margin: 20px auto;     
       position: relative;
       overflow: hidden;
       background-color: #f5f5f5; 
       box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-      border-radius: 40px;   /* 加上大圓角，模擬手機外框 */
+      border-radius: 40px;   
     }
 
-    /* 2. SPA 視圖切換邏輯 */
+    /* SPA 視圖切換邏輯 */
     .page-view {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      display: none; /* 預設隱藏 */
+      display: none; 
       background-color: var(--bg-gray);
     }
 
     .page-view.active {
-      display: block; /* 加上 active 時顯示 */
+      display: block; 
     }
 
-    /* ==================== 3. 地圖首頁專屬樣式 ==================== */
-    /* 模擬地圖背景 (未來替換成 Google Maps) */
+    /* ==================== 地圖首頁專屬樣式 ==================== */
     .map-bg {
       position: absolute;
       top: 0;
@@ -75,7 +75,6 @@
       background-position: 0 0, 30px 30px;
       z-index: 1;
     }
-
     .map-bg::after {
       content: '';
       position: absolute;
@@ -84,7 +83,6 @@
       background: linear-gradient(135deg, rgba(162,207,242,0.3) 0%, rgba(255,255,255,0) 100%);
     }
 
-    /* UI 浮層 (確保在主要地圖上方) */
     .ui-layer {
       position: absolute;
       top: 0;
@@ -92,14 +90,10 @@
       width: 100%;
       height: 100%;
       z-index: 10;
-      pointer-events: none; /* 讓點擊穿透到地圖，按鈕另設 auto */
+      pointer-events: none; 
     }
+    .ui-layer > * { pointer-events: auto; }
 
-    .ui-layer > * {
-      pointer-events: auto; /* 恢復 UI 元件的點擊事件 */
-    }
-
-    /* 頂部搜尋列 */
     .top-search-bar {
       position: absolute;
       top: 20px;
@@ -113,248 +107,69 @@
       padding: 0 20px;
       box-shadow: var(--shadow-sm);
     }
-
-    .menu-btn, .bell-btn {
-      font-size: 20px;
-      color: var(--text-dark);
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
-    .search-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      padding: 0 15px;
-      font-size: 16px;
-      color: var(--text-dark);
-    }
+    .menu-btn, .bell-btn { font-size: 20px; color: var(--text-dark); cursor: pointer; border: none; background: none; }
+    .search-input { flex: 1; border: none; outline: none; padding: 0 15px; font-size: 16px; color: var(--text-dark); }
     
-    .search-input::placeholder {
-      color: #b0b0b0;
-    }
+    .floating-top-left { position: absolute; top: 90px; left: 15px; display: flex; flex-direction: column; gap: 12px; }
+    .row-btns { display: flex; gap: 10px; }
+    .pill-btn, .circle-btn { background: white; border: none; border-radius: 25px; box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: bold; color: var(--text-dark); }
+    .pill-btn { padding: 8px 16px; gap: 8px; }
+    .circle-btn { width: 36px; height: 36px; border-radius: 50%; }
 
-    /* 浮動元件 - 左上角按鈕群 */
-    .floating-top-left {
-      position: absolute;
-      top: 90px;
-      left: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .row-btns {
-      display: flex;
-      gap: 10px;
-    }
-
-    .pill-btn, .circle-btn {
-      background: white;
-      border: none;
-      border-radius: 25px;
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      color: var(--text-dark);
-    }
-
-    .pill-btn {
-      padding: 8px 16px;
-      gap: 8px;
-    }
-
-    .circle-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-    }
-
-    /* 地標 Pin 樣式 */
     .map-marker {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-15px, -50%); /* 調整中心點對齊 */
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
+      top: 50%; left: 50%;
+      transform: translate(-15px, -50%);
+      display: flex; align-items: center; gap: 8px; cursor: pointer;
     }
-
     .pin-icon {
-      width: 34px;
-      height: 34px;
-      background: var(--marker-red);
-      border: 2px solid white;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+      width: 34px; height: 34px; background: var(--marker-red); border: 2px solid white; border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     }
+    .pin-icon i { transform: rotate(45deg); color: white; font-size: 14px; }
+    .marker-info { background: rgba(255, 255, 255, 0.9); padding: 6px 12px; border-radius: 8px; box-shadow: var(--shadow-sm); white-space: nowrap; }
+    .marker-title { font-size: 15px; font-weight: bold; color: var(--text-dark); margin-bottom: 2px; }
+    .marker-status { font-size: 12px; color: var(--text-gray); }
 
-    .pin-icon i {
-      transform: rotate(45deg); /* 將 icon 轉正 */
-      color: white;
-      font-size: 14px;
-    }
-
-    .marker-info {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 6px 12px;
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      white-space: nowrap;
-    }
-
-    .marker-title {
-      font-size: 15px;
-      font-weight: bold;
-      color: var(--text-dark);
-      margin-bottom: 2px;
-    }
-
-    .marker-status {
-      font-size: 12px;
-      color: var(--text-gray);
-    }
-
-    /* 底部導覽列 (包含主按鈕) */
     .bottom-nav-container {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      padding: 0 20px;
-      z-index: 20;
+      position: absolute; bottom: 20px; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 20px; z-index: 20;
     }
-
-    .side-nav-btn {
-      width: 48px;
-      height: 48px;
-      background: white;
-      border-radius: 50%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: var(--shadow-sm);
-      color: var(--text-dark);
-      font-size: 18px;
-      cursor: pointer;
-      border: none;
-    }
-
-    /* 超大借傘按鈕 */
+    .side-nav-btn { width: 48px; height: 48px; background: white; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); color: var(--text-dark); font-size: 18px; cursor: pointer; border: none; }
+    
     .main-borrow-btn {
-      width: 140px;
-      height: 140px;
-      background: var(--primary-green);
-      border-radius: 50%;
-      position: absolute;
-      left: 50%;
-      bottom: -40px; /* 使其下半部超出畫面，形成半圓視覺 */
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start; /* 內容靠上，因為下半部會被切掉 */
-      padding-top: 25px;
-      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
-      border: 4px solid rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      color: var(--text-dark);
+      width: 140px; height: 140px; background: var(--primary-green); border-radius: 50%; position: absolute; left: 50%; bottom: -40px;
+      transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 25px; box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05); border: 4px solid rgba(255, 255, 255, 0.5); cursor: pointer; color: var(--text-dark);
     }
+    .main-borrow-btn i { font-size: 28px; margin-bottom: 8px; }
+    .main-borrow-btn span { font-size: 18px; font-weight: bold; letter-spacing: 2px; }
 
-    .main-borrow-btn i {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
-
-    .main-borrow-btn span {
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    /* ==================== 4. 擴充 UI 共用樣式 (第二階段) ==================== */
+    /* ==================== 擴充 UI 共用樣式 (第二階段) ==================== */
     .bg-light-gray { background-color: #f2f2f2; overflow-y: auto; }
     .bg-light-green { background-color: #e0f2e6; overflow-y: auto; }
     .icon-drop { color: #a3d9b4; }
 
-    /* 頂部 Header (Raingo 共用) */
     .raingo-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 25px;
-      background-color: var(--primary-green);
-      font-size: 24px;
-      font-weight: 500;
+      display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; background-color: var(--primary-green); font-size: 24px; font-weight: 500;
     }
     .header-title { font-weight: bold; }
-    .header-points {
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .header-points { font-size: 20px; display: flex; align-items: center; gap: 6px; }
 
-    /* ==================== 優惠券列表頁 ==================== */
-    .coupon-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      padding: 20px;
-      padding-bottom: 80px;
-    }
+    /* 優惠券列表頁 */
+    .coupon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; padding-bottom: 80px; }
     .coupon-card {
-      background: white;
-      border-radius: 16px;
-      padding: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      background: white; border-radius: 16px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      text-align: center; display: flex; flex-direction: column; gap: 10px; cursor: pointer; /* 統一加上指標 */
+      transition: transform 0.1s;
     }
-    .card-brand {
-      font-size: 12px;
-      font-weight: bold;
-      color: #008040;
-      text-align: left;
-    }
-    /* 票券形狀 (兩側圓形缺口) */
+    .coupon-card:active { transform: scale(0.98); }
+    
+    .card-brand { font-size: 12px; font-weight: bold; color: #008040; text-align: left; }
+    
     .ticket {
-      position: relative;
-      width: 100%;
-      height: 50px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
+      position: relative; width: 100%; height: 50px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;
     }
     .ticket::before, .ticket::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 16px;
-      height: 16px;
-      background-color: white;
-      border-radius: 50%;
-      transform: translateY(-50%);
+      content: ''; position: absolute; top: 50%; width: 16px; height: 16px; background-color: white; border-radius: 50%; transform: translateY(-50%);
     }
     .ticket::before { left: -8px; }
     .ticket::after { right: -8px; }
@@ -372,83 +187,27 @@
     .card-title { font-size: 12px; font-weight: bold; text-align: left; }
     .card-ratio { font-size: 12px; color: #666; text-align: left; }
 
-    /* ==================== 優惠詳細頁 ==================== */
+    /* 優惠詳細頁 */
     .detail-container { padding: 20px; }
-    .detail-card {
-      background: white;
-      border-radius: 20px;
-      padding: 30px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      position: relative;
-      overflow: hidden;
-    }
-    /* 大張票券缺口 */
+    .detail-card { background: white; border-radius: 20px; padding: 30px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
     .detail-card::before, .detail-card::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 30px;
-      height: 30px;
-      background-color: #f2f2f2;
-      border-radius: 50%;
-      transform: translateY(-50%);
+      content: ''; position: absolute; top: 50%; width: 30px; height: 30px; background-color: #f2f2f2; border-radius: 50%; transform: translateY(-50%);
     }
     .detail-card::before { left: -15px; }
     .detail-card::after { right: -15px; }
     
-    .detail-title {
-      text-align: center;
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    .detail-ratio {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      margin: 30px 0;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #ccc;
-    }
+    .detail-title { text-align: center; font-size: 18px; font-weight: bold; margin-top: 20px; }
+    .detail-ratio { text-align: center; font-size: 24px; font-weight: bold; margin: 30px 0; padding-bottom: 20px; border-bottom: 1px solid #ccc; }
     .rules-section { padding: 0 10px; }
     .rules-section h3 { font-size: 16px; margin-bottom: 10px; }
     .rules-section ol { padding-left: 20px; font-size: 15px; line-height: 1.8; color: #333; }
     
-    /* 底部固定按鈕區 */
-    .bottom-action-bar {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      padding: 20px;
-      background: #f2f2f2;
-    }
-    .btn-primary {
-      width: 100%;
-      background-color: #a3d9b4;
-      color: #333;
-      border: none;
-      border-radius: 25px;
-      padding: 15px 0;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+    .bottom-action-bar { position: absolute; bottom: 0; width: 100%; padding: 20px; background: #f2f2f2; }
+    .btn-primary { width: 100%; background-color: var(--btn-green); color: #333; border: none; border-radius: 25px; padding: 15px 0; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-    /* ==================== 數字鍵盤彈窗 (Overlay) ==================== */
+    /* 數字鍵盤彈窗 (Overlay) */
     .overlay-panel {
-      position: absolute;
-      bottom: -100%;
-      left: 0;
-      width: 100%;
-      height: 85%;
-      background-color: #e0f2e6;
-      border-radius: 30px 30px 0 0;
-      z-index: 50;
-      transition: bottom 0.3s ease-in-out;
-      box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-      display: flex;
-      flex-direction: column;
+      position: absolute; bottom: -100%; left: 0; width: 100%; height: 85%; background-color: #e0f2e6; border-radius: 30px 30px 0 0; z-index: 50; transition: bottom 0.3s ease-in-out; box-shadow: 0 -5px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column;
     }
     .overlay-panel.active { bottom: 0; }
     
@@ -456,13 +215,7 @@
     .btn-close-overlay { background: none; border: none; font-size: 24px; cursor: pointer; color: #333;}
     
     .numpad-content { padding: 0 20px; flex: 1; display: flex; flex-direction: column; }
-    .rules-toggle {
-      border-top: 1px solid #cce6d6;
-      border-bottom: 1px solid #cce6d6;
-      padding: 15px 0;
-      font-weight: bold;
-      position: relative;
-    }
+    .rules-toggle { border-top: 1px solid #cce6d6; border-bottom: 1px solid #cce6d6; padding: 15px 0; font-weight: bold; position: relative; }
     .numpad-status { padding: 15px 0; font-weight: bold; }
     
     .input-display { margin-bottom: 20px; }
@@ -470,71 +223,30 @@
     .amount-box { background: white; padding: 5px 15px; border-radius: 5px; border: 1px solid #333; min-width: 100px; text-align: right; }
     .points-box { min-width: 100px; text-align: right; }
 
-    /* 鍵盤 Grid */
-    .numpad-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: auto;
-      background: white;
-      padding: 15px;
-      border-radius: 20px;
-    }
-    .num-key {
-      background: #e0f2e6;
-      border: none;
-      border-radius: 10px;
-      padding: 15px 0;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    .numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: auto; background: white; padding: 15px; border-radius: 20px; }
+    .num-key { background: #e0f2e6; border: none; border-radius: 10px; padding: 15px 0; font-size: 24px; font-weight: bold; cursor: pointer; }
     .num-key:active { background: #cce6d6; }
 
+    /* 綠色確認兌換按鈕 */
     .btn-confirm-redeem {
-      width: 100%;
-      background: #333;
-      color: white;
-      border: none;
-      padding: 15px;
-      border-radius: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 15px 0 20px 0;
-      cursor: pointer;
+      width: 100%; background: var(--btn-green); color: #333; border: none; padding: 15px; border-radius: 15px; font-size: 18px; font-weight: bold; margin: 15px 0 20px 0; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+    .btn-confirm-redeem:active { transform: scale(0.98); }
 
-    /* ==================== QR Code 成功頁面 ==================== */
+    /* QR Code 成功頁面 */
     .qr-header {
-      text-align: center;
-      padding: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      background: #e0f2e6;
+      position: relative; text-align: center; padding: 20px; font-size: 18px; font-weight: bold; background: #e0f2e6;
     }
-    .qr-content { padding: 0 20px; display: flex; flex-direction: column; align-items: center;}
+    .qr-back-btn {
+      position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 20px; cursor: pointer; color: #333; padding: 5px;
+    }
     
+    .qr-content { padding: 0 20px; display: flex; flex-direction: column; align-items: center;}
     .qr-info-card {
-      background: white;
-      width: 100%;
-      padding: 20px;
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      font-weight: bold;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      position: relative;
+      background: white; width: 100%; padding: 20px; border-radius: 15px; display: flex; align-items: center; gap: 15px; font-weight: bold; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative;
     }
     .qr-info-card::before, .qr-info-card::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      width: 20px;
-      height: 20px;
-      background-color: #e0f2e6;
-      border-radius: 50%;
-      transform: translateY(-50%);
+      content: ''; position: absolute; top: 50%; width: 20px; height: 20px; background-color: #e0f2e6; border-radius: 50%; transform: translateY(-50%);
     }
     .qr-info-card::before { left: -10px; }
     .qr-info-card::after { right: -10px; }
@@ -544,43 +256,14 @@
     .qr-summary { width: 100%; margin: 30px 0; }
     .summary-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
     
-    .barcode-box {
-      width: 100%; background: white; padding: 15px; text-align: center; border: 1px solid #333; font-weight: bold; margin-bottom: 30px; letter-spacing: 5px;
-    }
+    .barcode-box { width: 100%; background: white; padding: 15px; text-align: center; border: 1px solid #333; font-weight: bold; margin-bottom: 30px; letter-spacing: 5px; }
     
-    /* 大水滴 QR Code 佔位 */
+    /* 大水滴 QR Code */
     .giant-drop {
-      width: 200px;
-      height: 200px;
-      background-color: #a3d9b4;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      margin-bottom: 40px;
+      width: 200px; height: 200px; background-color: #a3d9b4; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 40px;
     }
-    .giant-drop-inner {
-      transform: rotate(45deg);
-      font-size: 20px;
-      font-weight: bold;
-      color: #333;
-    }
+    .giant-drop-inner { transform: rotate(45deg); font-size: 20px; font-weight: bold; color: #333; }
 
-    .btn-close-qr {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 20px;
-      font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -632,62 +315,61 @@
       </div>
       
       <div class="coupon-grid">
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand">我家 FamilyMart</div>
           <div class="ticket bg-blue">現金抵用券</div>
           <div class="card-title">我家 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 10 = 5元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #d11e4f;">POYA 寶雅</div>
           <div class="ticket bg-pink">現金抵用券</div>
           <div class="card-title">寶雅 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 5 = 1元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #e44d42;">小南百貨</div>
           <div class="ticket bg-yellow">現金抵用券</div>
           <div class="card-title">小南百貨 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 5 = 1元</div>
         </div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')" style="cursor: pointer;">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="font-weight: 900; font-size: 18px; color: #008040;">吃茶兩千</div>
           <div class="ticket bg-green">現金抵用券</div>
           <div class="card-title">吃茶兩千 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 10 = 5元</div>
         </div>
-
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #004ea2;">全聯福利中心</div>
           <div class="ticket bg-red">現金抵用券</div>
           <div class="card-title">全聯 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 10 = 5元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #007e46;">7-ELEVEN</div>
           <div class="ticket bg-orange">現金抵用券</div>
           <div class="card-title">7-11 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 5 = 1元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #f68b1f;">康是美</div>
           <div class="ticket bg-orange">現金抵用券</div>
           <div class="card-title">康是美 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 5 = 1元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #009ca6;">屈臣氏</div>
           <div class="ticket bg-teal">現金抵用券</div>
           <div class="card-title">屈臣氏 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 10 = 5元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #00704a;">星巴克</div>
           <div class="ticket bg-dark-green">現金抵用券</div>
           <div class="card-title">星巴克 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 20 = 10元</div>
         </div>
-        <div class="coupon-card">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
           <div class="card-brand" style="color: #da291c;">麥當勞</div>
           <div class="ticket bg-red">現金抵用券</div>
           <div class="card-title">麥當勞 現金抵用金</div>
@@ -699,14 +381,14 @@
     <div id="view-coupon-detail" class="page-view bg-light-gray">
       <div class="raingo-header">
         <div class="header-title" onclick="switchView('view-coupons')" style="cursor: pointer;">
-          <i class="fa-solid fa-arrow-left"></i> 查看優惠
+          <i class="fa-solid fa-arrow-left" style="font-size: 16px; margin-right: 8px;"></i> 查看優惠
         </div>
         <div class="header-points"><i class="fa-solid fa-droplet icon-drop"></i> 700</div>
       </div>
 
       <div class="detail-container">
         <div class="detail-card">
-          <h2 style="font-size: 32px; text-align: center; margin: 20px 0;">吃茶兩千</h2>
+          <h2 style="font-size: 32px; text-align: center; margin: 20px 0; color: #008040;">吃茶兩千</h2>
           <div class="detail-title">吃茶兩千 現金抵用券</div>
         </div>
 
@@ -729,7 +411,10 @@
     </div>
 
     <div id="view-qr-success" class="page-view bg-light-green">
-      <div class="qr-header">請刷條碼進行兌換</div>
+      <div class="qr-header">
+        <i class="fa-solid fa-arrow-left qr-back-btn" onclick="switchView('view-coupons')"></i>
+        請刷條碼進行兌換
+      </div>
       
       <div class="qr-content">
         <div class="qr-info-card">
@@ -748,8 +433,6 @@
           <div class="giant-drop-inner">QR CODE</div>
         </div>
       </div>
-      
-      <button class="btn-close-qr" onclick="switchView('view-coupons')">完成並返回</button>
     </div>
 
     <div id="overlay-numpad" class="overlay-panel">
@@ -781,7 +464,8 @@
           <button class="num-key" onclick="inputNum('7')">7</button>
           <button class="num-key" onclick="inputNum('8')">8</button>
           <button class="num-key" onclick="inputNum('9')">9</button>
-          <div></div> <button class="num-key" onclick="inputNum('0')">0</button>
+          <div></div> 
+          <button class="num-key" onclick="inputNum('0')">0</button>
           <button class="num-key" onclick="deleteNum()"><i class="fa-solid fa-delete-left"></i></button>
         </div>
 
@@ -800,14 +484,13 @@
       const targetView = document.getElementById(viewId);
       if (targetView) targetView.classList.add('active');
       
-      // 切換頁面時自動關閉彈窗
       closeNumpad();
     }
 
     // ===== 數字鍵盤與兌換邏輯 =====
     let currentInput = "";
     const RATIO = 2; // 2點 = 1元
-    const MAX_DOLLARS = 5; // 最多5元
+    const MAX_DOLLARS = 5; // 限制最多輸入5元
 
     function openNumpad() {
       currentInput = "";
@@ -820,10 +503,8 @@
     }
 
     function inputNum(num) {
-      // 限制只能輸入一位數 (因為最多只能折抵5元)
-      if (currentInput.length < 1) {
+      if (currentInput.length < 1) { // 限制只能輸入一位數
         let newVal = parseInt(currentInput + num);
-        // 檢查是否超過上限 5 元
         if (newVal <= MAX_DOLLARS) {
           currentInput += num;
         } else {
@@ -846,17 +527,18 @@
       document.getElementById('display-points').innerText = points + " 點";
     }
 
+    // 點擊「確認兌換」執行流程
     function confirmRedeem() {
       if(currentInput === "" || parseInt(currentInput) === 0) {
         alert("請輸入兌換金額！");
         return;
       }
       
-      // 更新成功頁面的數據
+      // 更新 QR 成功頁面的數據
       document.getElementById('success-amount').innerText = "$" + currentInput;
       document.getElementById('success-points').innerText = (parseInt(currentInput) * RATIO) + "點";
       
-      // 切換到 QR Code 頁面並關閉彈窗
+      // 關閉彈窗並切換至 QR Code 頁面
       closeNumpad();
       switchView('view-qr-success');
     }
