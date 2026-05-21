@@ -207,7 +207,7 @@
     .qr-info-card { background: white; width: 100%; padding: 20px; border-radius: 15px; display: flex; align-items: center; gap: 15px; font-weight: bold; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: relative; margin-top: 20px; }
     .qr-info-card::before, .qr-info-card::after { content: ''; position: absolute; top: 50%; width: 20px; height: 20px; background-color: #e0f2e6; border-radius: 50%; transform: translateY(-50%); }
     .qr-info-card::before { left: -10px; } .qr-info-card::after { right: -10px; }
-    .brand-name { background: white; border: 1px solid #eee; border-radius: 10px; padding: 10px; color: #008040; }
+    .brand-name { background: white; border: 1px solid #eee; border-radius: 10px; padding: 10px; color: #008040; font-weight: bold; }
     .qr-summary { width: 100%; margin: 30px 0; }
     .summary-row { display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
     .barcode-box { width: 100%; background: white; padding: 15px; text-align: center; border: 1px solid #333; font-weight: bold; margin-bottom: 30px; letter-spacing: 5px; }
@@ -389,16 +389,16 @@
         <div class="header-points"><i class="fa-solid fa-droplet icon-drop"></i> 700</div>
       </div>
       <div class="coupon-grid">
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">我家 FamilyMart</div><div class="ticket bg-blue">現金抵用券</div><div class="card-title">我家 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">POYA 寶雅</div><div class="ticket bg-pink">現金抵用券</div><div class="card-title">寶雅 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">小南百貨</div><div class="ticket bg-yellow">現金抵用券</div><div class="card-title">小南百貨 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="font-weight:900;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶兩千 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">全聯福利中心</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">全聯 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">7-ELEVEN</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">7-11 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">屈臣氏</div><div class="ticket bg-teal">現金抵用券</div><div class="card-title">屈臣氏 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">星巴克</div><div class="ticket bg-dark-green">現金抵用券</div><div class="card-title">星巴克 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">麥當勞</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麥當勞 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('我家 FamilyMart', '我家 現金抵用金', '#005baa')"><div class="card-brand">我家 FamilyMart</div><div class="ticket bg-blue">現金抵用券</div><div class="card-title">我家 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('POYA 寶雅', '寶雅 現金抵用金', '#ea4c89')"><div class="card-brand">POYA 寶雅</div><div class="ticket bg-pink">現金抵用券</div><div class="card-title">寶雅 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('小南百貨', '小南百貨 現金抵用金', '#e6a817')"><div class="card-brand">小南百貨</div><div class="ticket bg-yellow">現金抵用券</div><div class="card-title">小南百貨 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('吃茶兩千', '吃茶兩千 現金抵用金', '#008040')"><div class="card-brand" style="font-weight:900;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶兩千 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('全聯福利中心', '全聯 現金抵用金', '#e3001b')"><div class="card-brand">全聯福利中心</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">全聯 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('7-ELEVEN', '7-11 現金抵用金', '#007e44')"><div class="card-brand">7-ELEVEN</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">7-11 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('康是美', '康是美 現金抵用金', '#f57c00')"><div class="card-brand">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('屈臣氏', '屈臣氏 現金抵用金', '#00838f')"><div class="card-brand">屈臣氏</div><div class="ticket bg-teal">現金抵用券</div><div class="card-title">屈臣氏 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('星巴克', '星巴克 現金抵用金', '#00704a')"><div class="card-brand">星巴克</div><div class="ticket bg-dark-green">現金抵用券</div><div class="card-title">星巴克 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('麥當勞', '麥當勞 現金抵用金', '#da291c')"><div class="card-brand">麥當勞</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麥當勞 現金抵用金</div></div>
       </div>
       <button class="charity-entry-btn" onclick="switchView('view-charity')">
         <i class="fa-solid fa-chevron-up"></i>
@@ -469,8 +469,8 @@
       </div>
       <div class="detail-container">
         <div class="detail-card">
-          <h2 style="font-size:32px; text-align:center; margin:20px 0; color:#008040;">吃茶兩千</h2>
-          <div class="detail-title">吃茶兩千 現金抵用券</div>
+          <h2 id="detail-brand-name" style="font-size:32px; text-align:center; margin:20px 0; color:#008040;">吃茶兩千</h2>
+          <div id="detail-title" class="detail-title">吃茶兩千 現金抵用券</div>
         </div>
         <div class="detail-ratio">2 <i class="fa-solid fa-droplet icon-drop"></i> = $ 1</div>
         <div class="rules-section">
@@ -503,7 +503,7 @@
     <div id="view-qr-success" class="page-view bg-light-green">
       <div class="qr-header"><i class="fa-solid fa-arrow-left qr-back-btn" onclick="switchView('view-coupons')"></i>請刷條碼進行兌換</div>
       <div class="qr-content">
-        <div class="qr-info-card"><div class="brand-name">吃茶兩千</div><div>吃茶兩千 現金抵用券</div></div>
+        <div class="qr-info-card"><div id="success-brand-name" class="brand-name">吃茶兩千</div><div id="success-title">吃茶兩千 現金抵用券</div></div>
         <div class="qr-summary">
           <div class="summary-row"><span>兌換內容</span> <strong id="success-amount">$0</strong></div>
           <div class="summary-row"><span>使用點數</span> <strong id="success-points">0點</strong></div>
@@ -598,6 +598,22 @@
       if (targetView) targetView.classList.add('active');
       if (viewId === 'view-map' && map) setTimeout(() => { map.invalidateSize(); }, 50);
       closeNumpad();
+    }
+
+    // ==================== 動態優惠券詳細頁邏輯 ====================
+    function openCouponDetail(brand, title, color) {
+      // 替換詳細頁面的內容與顏色
+      document.getElementById('detail-brand-name').innerText = brand;
+      document.getElementById('detail-brand-name').style.color = color;
+      document.getElementById('detail-title').innerText = title;
+
+      // 替換最後掃碼頁面的內容與顏色
+      document.getElementById('success-brand-name').innerText = brand;
+      document.getElementById('success-brand-name').style.color = color;
+      document.getElementById('success-title').innerText = title;
+
+      // 切換到詳細頁面
+      switchView('view-coupon-detail');
     }
 
     // ==================== 500M 附近站點邏輯 ====================
