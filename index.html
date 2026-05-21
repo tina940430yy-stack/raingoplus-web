@@ -6,7 +6,7 @@
   <title>RAINGO 共享傘</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* 基礎重置與變數 */
+    /* ==================== 1. 基礎重置與 Viewport (滿版設定) ==================== */
     :root {
       --primary-green: #d1ebd6; 
       --btn-green: #a3d9b4; /* 按鈕專用薄荷綠 */
@@ -22,9 +22,19 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    /* 關鍵：確保 html 和 body 佔滿螢幕，以便子元素使用 100% 高度 */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-gray); /* 全螢幕時使用，突顯 App 範圍 */
       font-family: 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
+    /* 移除原本模擬手機居中的 body 樣式 */
+    /*
     body {
       background-color: #333;
       display: flex;
@@ -32,20 +42,28 @@
       align-items: center;
       min-height: 100vh;
     }
+    */
 
-    /* App 容器 (模擬實體手機外框) */
+    /* ==================== 2. App 容器 (滿版 Viewport) ==================== */
+    /* 這是關鍵修改：填滿螢幕，移除模擬手機外框 */
     #app-container {
-      width: 375px;          
-      height: 812px;         
-      margin: 20px auto;     
+      width: 100%;          /* 佔滿 Viewport 寬度 */
+      height: 100%;         /* 佔滿 Viewport 高度 */
       position: relative;
-      overflow: hidden;
-      background-color: #f5f5f5; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-      border-radius: 40px;   
+      overflow: hidden;      /* 保持路由切換效果 */
+      background-color: var(--bg-gray);
+      
+      /* 移除模擬外框樣式 */
+      /*
+      width: 375px;
+      height: 812px;
+      margin: 20px auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 40px;
+      */
     }
 
-    /* SPA 視圖切換邏輯 */
+    /* 3. SPA 視圖切換邏輯 */
     .page-view {
       position: absolute;
       top: 0;
@@ -158,7 +176,7 @@
     .coupon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; padding-bottom: 80px; }
     .coupon-card {
       background: white; border-radius: 16px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      text-align: center; display: flex; flex-direction: column; gap: 10px; cursor: pointer; /* 統一加上指標 */
+      text-align: center; display: flex; flex-direction: column; gap: 10px; cursor: pointer;
       transition: transform 0.1s;
     }
     .coupon-card:active { transform: scale(0.98); }
@@ -258,11 +276,17 @@
     
     .barcode-box { width: 100%; background: white; padding: 15px; text-align: center; border: 1px solid #333; font-weight: bold; margin-bottom: 30px; letter-spacing: 5px; }
     
-    /* 大水滴 QR Code */
+    /* 大水滴 QR Code (尖端朝上) */
     .giant-drop {
-      width: 200px; height: 200px; background-color: #a3d9b4; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 40px;
+      width: 200px; height: 200px; background-color: #a3d9b4; 
+      /* 將原本的 50% 50% 50% 0 (尖端在右下) 改為 0 50% 50% 50% (尖端在左上) */
+      border-radius: 0 50% 50% 50%; 
+      /* 將尖端轉到正上方，形成水滴形狀 */
+      transform: rotate(45deg); 
+      display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin-bottom: 40px;
     }
-    .giant-drop-inner { transform: rotate(45deg); font-size: 20px; font-weight: bold; color: #333; }
+    /* 內部文字需要反向轉回水平 */
+    .giant-drop-inner { transform: rotate(-45deg); font-size: 20px; font-weight: bold; color: #333; }
 
   </style>
 </head>
@@ -301,7 +325,7 @@
           <button class="main-borrow-btn" onclick="alert('啟動掃碼借傘相機')">
             <i class="fa-solid fa-expand"></i><span>借傘</span>
           </button>
-          <button class="side-nav-btn"><i class="fa-solid fa-route"></i></button>
+          <button class="side-nav-btn"><i class="fa-solid fa-gamepad"></i></button>
         </div>
       </div>
     </div>
@@ -333,7 +357,7 @@
           <div class="card-title">小南百貨 現金抵用金</div>
           <div class="card-ratio"><i class="fa-solid fa-droplet icon-drop"></i> 5 = 1元</div>
         </div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')">
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')" style="cursor: pointer;">
           <div class="card-brand" style="font-weight: 900; font-size: 18px; color: #008040;">吃茶兩千</div>
           <div class="ticket bg-green">現金抵用券</div>
           <div class="card-title">吃茶兩千 現金抵用金</div>
