@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RAINGO 共享傘</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* 基礎重置與變數 */
+    :root {
+      --primary-green: #d1ebd6; /* 借傘按鈕的薄荷綠 */
+      --text-dark: #333333;
+      --text-gray: #888888;
+      --marker-red: #e44d42;
+      --bg-gray: #f4f4f4;
+      --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #333; /* 外層深色背景，突顯 App 範圍 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* 1. App 容器 (模擬實體手機外框) */
+    #app-container {
+      width: 375px;          /* 鎖定寬度為常見的 iPhone 寬度 */
+      height: 812px;         /* 鎖定高度為常見的 iPhone 高度 */
+      margin: 20px auto;     /* 讓它在電腦螢幕上置中，且上下留一點空間 */
+      position: relative;
+      overflow: hidden;
+      background-color: #f5f5f5; /* 視需要設定背景色 */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* 加上一點陰影，讓它看起來更像獨立的手機畫面 */
+      border-radius: 40px;   /* 加上大圓角，模擬手機外框 */
+    }
+
+    /* 2. SPA 視圖切換邏輯 */
+    .page-view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none; /* 預設隱藏 */
+      background-color: var(--bg-gray);
+    }
+
+    .page-view.active {
+      display: block; /* 加上 active 時顯示 */
+    }
+
+    /* 3. 地圖首頁專屬樣式 */
+    /* 模擬地圖背景 (未來替換成 Google Maps) */
+    .map-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #e8eaed;
+      background-image: 
+        linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), 
+        linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      z-index: 1;
+    }
+
+    .map-bg::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(162,207,242,0.3) 0%, rgba(255,255,255,0) 100%);
+    }
+
+    /* UI 浮層 (確保在主要地圖上方) */
+    .ui-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none; /* 讓點擊穿透到地圖，按鈕另設 auto */
+    }
+
+    .ui-layer > * {
+      pointer-events: auto; /* 恢復 UI 元件的點擊事件 */
+    }
+
+    /* 頂部搜尋列 */
+    .top-search-bar {
+      position: absolute;
+      top: 20px;
+      left: 15px;
+      right: 15px;
+      height: 50px;
+      background: white;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .menu-btn, .bell-btn {
+      font-size: 20px;
+      color: var(--text-dark);
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 0 15px;
+      font-size: 16px;
+      color: var(--text-dark);
+    }
+    
+    .search-input::placeholder {
+      color: #b0b0b0;
+    }
+
+    /* 浮動元件 - 左上角按鈕群 */
+    .floating-top-left {
+      position: absolute;
+      top: 90px;
+      left: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .row-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .pill-btn, .circle-btn {
+      background: white;
+      border: none;
+      border-radius: 25px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .pill-btn {
+      padding: 8px 16px;
+      gap: 8px;
+    }
+
+    .circle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+
+    /* 地標 Pin 樣式 */
+    .map-marker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-15px, -50%); /* 調整中心點對齊 */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .pin-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--marker-red);
+      border: 2px solid white;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .pin-icon i {
+      transform: rotate(45deg); /* 將 icon 轉正 */
+      color: white;
+      font-size: 14px;
+    }
+
+    .marker-info {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 6px 12px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      white-space: nowrap;
+    }
+
+    .marker-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .marker-status {
+      font-size: 12px;
+      color: var(--text-gray);
+    }
+
+    /* 底部導覽列 (包含主按鈕) */
+    .bottom-nav-container {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 20px;
+      z-index: 20;
+    }
+
+    .side-nav-btn {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      color: var(--text-dark);
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* 超大借傘按鈕 */
+    .main-borrow-btn {
+      width: 140px;
+      height: 140px;
+      background: var(--primary-green);
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      bottom: -40px; /* 使其下半部超出畫面，形成半圓視覺 */
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* 內容靠上，因為下半部會被切掉 */
+      padding-top: 25px;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+      border: 4px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    .main-borrow-btn i {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .main-borrow-btn span {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+    
+    <div id="view-map" class="page-view active">
+      <div class="map-bg"></div>
+
+      <div class="ui-layer">
+        
+        <div class="top-search-bar">
+          <button class="menu-btn" onclick="alert('開啟側邊欄')">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <input type="text" class="search-input" placeholder="輸入租借站名">
+          <button class="bell-btn" onclick="alert('開啟通知')">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+        </div>
+
+        <div class="floating-top-left">
+          <div class="row-btns">
+            <button class="pill-btn">
+              <i class="fa-solid fa-umbrella"></i> 可借
+            </button>
+            <button class="circle-btn">
+              <i class="fa-solid fa-info"></i>
+            </button>
+          </div>
+          <button class="circle-btn" style="margin-top: 5px;">
+            <i class="fa-solid fa-location-arrow" style="transform: rotate(-45deg);"></i>
+          </button>
+        </div>
+
+        <div class="map-marker">
+          <div class="pin-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <div class="marker-info">
+            <div class="marker-title">國立臺中教育大學</div>
+            <div class="marker-status">營業中</div>
+          </div>
+        </div>
+
+        <div class="bottom-nav-container">
+          <button class="side-nav-btn">
+            <i class="fa-solid fa-map-pin" style="font-size: 16px;"></i>
+          </button>
+          
+          <button class="main-borrow-btn" onclick="alert('啟動掃碼借傘相機')">
+            <i class="fa-solid fa-expand"></i> <span>借傘</span>
+          </button>
+
+          <button class="side-nav-btn">
+            <i class="fa-solid fa-route"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="view-coupons" class="page-view">
+      <div style="padding: 20px; text-align: center; margin-top: 50px;">
+        <h2>優惠兌換</h2>
+        <p>開發中...</p>
+        <button onclick="switchView('view-map')" style="margin-top: 20px; padding: 10px;">返回地圖</button>
+      </div>
+    </div>
+
+    <div id="view-charity" class="page-view">
+      <div style="padding: 20px; text-align: center; margin-top: 50px;">
+        <h2>愛心捐贈</h2>
+        <p>開發中...</p>
+        <button onclick="switchView('view-map')" style="margin-top: 20px; padding: 10px;">返回地圖</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /**
+     * SPA 簡單路由切換邏輯
+     * @param {string} viewId - 要切換顯示的區塊 ID
+     */
+    function switchView(viewId) {
+      // 1. 取得所有的 page-view
+      const views = document.querySelectorAll('.page-view');
+      
+      // 2. 移除所有視圖的 active class (隱藏)
+      views.forEach(view => {
+        view.classList.remove('active');
+      });
+      
+      // 3. 替指定的目標加上 active class (顯示)
+      const targetView = document.getElementById(viewId);
+      if (targetView) {
+        targetView.classList.add('active');
+      }
+    }
+
+    // 未來若要串接 API 或處理地圖互動，皆可在此擴充邏輯
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("RAINGO App 初始化完成");
+    });
+  </script>
+</body>
+</html>
