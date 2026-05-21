@@ -27,28 +27,25 @@
       padding: 0;
     }
 
+    /* ★ 修正：恢復滿版佈局，移除居中模擬外框的樣式 */
     html, body {
       height: 100%;
       height: 100dvh; 
       margin: 0;
       padding: 0;
-      background-color: #333;
+      background-color: var(--bg-gray);
       font-family: 'PingFang TC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
-    /* App 容器 (模擬實體手機外框) */
+    /* ★ 修正：App 容器恢復滿版設定 */
     #app-container {
-      width: 375px;          
-      height: 812px;         
+      width: 100%;          
+      height: 100%;
+      height: 100dvh;         
       position: relative;
       overflow: hidden;
       background-color: var(--bg-gray);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3); 
-      border-radius: 40px;   
     }
 
     /* SPA 視圖切換邏輯 */
@@ -93,13 +90,11 @@
     .pill-btn { padding: 8px 16px; gap: 8px; }
     .circle-btn { width: 36px; height: 36px; border-radius: 50%; }
 
-    /* ★ 修正：清除 Leaflet 預設白底外框，讓自訂紅色雨滴標記正常顯示 */
     .leaflet-custom-marker {
       background: none !important;
       border: none !important;
     }
 
-    /* 紅色雨滴圖標樣式 */
     .pin-icon {
       width: 34px; height: 34px; background: var(--marker-red); border: 2px solid white; border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
@@ -137,7 +132,6 @@
     .bg-blue { background-color: #007bc8; } .bg-pink { background-color: #d11e4f; } .bg-yellow { background-color: #fbd600; color: #333; } .bg-green { background-color: #8db529; }
     .bg-red { background-color: #e44d42; } .bg-orange { background-color: #f39c12; } .bg-teal { background-color: #009ca6; } .bg-dark-green { background-color: #00704a; }
 
-    /* 愛心點數入口按鈕 (半圓形) */
     .charity-entry-btn {
       position: fixed; bottom: -15px; left: 50%; transform: translateX(-50%); width: 160px; height: 100px; 
       background: var(--btn-green); border: 4px solid white; border-radius: 80px 80px 0 0; padding-top: 15px;
@@ -267,7 +261,6 @@
           </div>
           <button class="circle-btn" style="margin-top: 5px;" onclick="centerToTaipei()"><i class="fa-solid fa-location-arrow" style="transform: rotate(-45deg);"></i></button>
         </div>
-
         <div class="bottom-nav-container">
           <button class="side-nav-btn" onclick="switchView('view-coupons')"><i class="fa-solid fa-store"></i></button>
           <button class="main-borrow-btn" onclick="alert('啟動掃碼借傘相機')">
@@ -287,7 +280,7 @@
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand">我家 FamilyMart</div><div class="ticket bg-blue">現金抵用券</div><div class="card-title">我家 現金抵用金</div></div>
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color:#d11e4f;">POYA 寶雅</div><div class="ticket bg-pink">現金抵用券</div><div class="card-title">寶雅 現金抵用金</div></div>
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color:#e44d42;">小南百貨</div><div class="ticket bg-yellow">現金抵用券</div><div class="card-title">小南百貨 現金抵用金</div></div>
-        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="font-weight:900; color:#008040;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶裝備 現金抵用金</div></div>
+        <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="font-weight:900; color:#008040;">吃茶兩千</div><div class="ticket bg-green">現金抵用券</div><div class="card-title">吃茶兩千 現金抵用金</div></div>
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color:#004ea2;">全聯福利中心</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">全聯 現金抵用金</div></div>
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color:#007e46;">7-ELEVEN</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">7-11 現金抵用金</div></div>
         <div class="coupon-card" onclick="switchView('view-coupon-detail')"><div class="card-brand" style="color:#f68b1f;">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
@@ -345,13 +338,13 @@
         </div>
 
         <div class="charity-footer">
-          <button class="footer-circle-btn" onclick="alert('愛心理念：每一把被使用的傘，都在為地球減碳。我們希望將這份善意轉換為實質幫助。')">
+          <button class="footer-circle-btn" onclick="alert('♡每一把被使用的傘，都在為地球減碳，我們希望將借傘得到的點數可以轉換為實質幫助，讓公益不再是沉重的負擔，而是在日常借還傘之間自然發生的善意。')">
             <i class="fa-solid fa-heart"></i>
           </button>
           
           <button class="btn-charity-donate" onclick="alert('開啟捐贈點數視窗')">愛心捐贈</button>
           
-          <button class="footer-circle-btn" onclick="alert('基金會捐款說明：您的點數將以 10點=1元 比例，於每季底撥款給該機構。')">
+          <button class="footer-circle-btn" onclick="alert('★公益匯率：採 2 點換 1 元的方式兌換，相較於零售通路，我們給予公益捐贈更高的權重，鼓勵使用者優先將小額點數化為大愛。\n★自主選贈與透明化：使用者可根據個人關注的議題，自由選擇合作名單內的基金會進行捐贈。\n1.App 介面將即時公開各基金會的目前累積總額。\n2.結算機制：當單一基金會累積達 1000 元時，系統將正式撥款，並推播通知所有參與該次捐贈的使用者，共同分享撐傘守護他人的成就感。')">
             <i class="fa-solid fa-info"></i>
           </button>
         </div>
@@ -448,34 +441,28 @@
     // ==================== 地圖初始化邏輯 ====================
     let map;
     function initMap() {
-      // 建立 Leaflet 地圖，設定預設中心點在台北車站附近的 [25.0478, 121.5170]
       map = L.map('map', {
         zoomControl: false 
       }).setView([25.0478, 121.5170], 16);
 
-      // 載入高解析度、完全免費且不糊的明亮版地圖圖磚 (CartoDB Light)
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19
       }).addTo(map);
 
-      // ★ 新增：在台北車站點位上，利用 Leaflet 的 divIcon 綁定自訂的「紅色雨滴標記」
       const redIcon = L.divIcon({
         html: '<div class="pin-icon"><i class="fa-solid fa-umbrella"></i></div>',
-        className: 'leaflet-custom-marker', // 套用樣式以消除預設白底外框
+        className: 'leaflet-custom-marker',
         iconSize: [34, 34],
-        iconAnchor: [17, 34] // 定位點設定在雨滴圖標的下方正尖端
+        iconAnchor: [17, 34]
       });
       
-      // 將紅色雨滴標記釘在台北車站
       L.marker([25.0478, 121.5170], { icon: redIcon }).addTo(map);
     }
 
-    // 定位回到台北車站中心點的方法
     function centerToTaipei() {
       if (map) map.setView([25.0478, 121.5170], 16);
     }
 
-    // 當網頁載入完成時載入地圖
     document.addEventListener('DOMContentLoaded', () => {
       initMap();
     });
