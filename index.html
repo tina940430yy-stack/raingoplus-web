@@ -155,11 +155,11 @@
     .progress-text { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
     .filling-drop { width: 220px; height: 220px; background-color: #f0f0f0; border-radius: 0 50% 50% 50%; transform: rotate(45deg); position: relative; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-top: 60px; margin-bottom: 20px; }
     
-    /* 新增：將水滴反轉回水平的水位容器 */
+    /* 水滴反轉回水平的水位容器 */
     .water-group { position: absolute; top: 50%; left: 50%; width: 312px; height: 312px; transform: translate(-50%, -50%) rotate(-45deg); z-index: 1; }
     .water-fill { position: absolute; bottom: 0; left: 0; width: 100%; background-color: #a3d9b4; transition: height 0.5s ease-out; }
 
-    /* 新增：雙層波浪動畫效果 */
+    /* 雙層波浪動畫效果 */
     .water-fill::before, .water-fill::after { content: ''; position: absolute; left: 0; width: 100%; height: 20px; background-repeat: repeat-x; pointer-events: none; }
     .water-fill::before { top: -19px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40'%3E%3Cpath d='M0 20 Q100 40 200 20 T400 20 L400 40 L0 40 Z' fill='%238bcfa0' opacity='0.6'/%3E%3C/svg%3E"); background-size: 200px 100%; animation: waveAnim1 3s linear infinite; }
     .water-fill::after { top: -19px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 40'%3E%3Cpath d='M0 20 Q100 5 200 20 T400 20 L400 40 L0 40 Z' fill='%23a3d9b4'/%3E%3C/svg%3E"); background-size: 250px 100%; animation: waveAnim2 2.5s linear infinite; }
@@ -397,7 +397,10 @@
 
     <div id="view-coupons" class="page-view bg-light-gray">
       <div class="raingo-header">
-        <div class="header-title" onclick="switchView('view-map')" style="cursor:pointer;"><i class="fa-solid fa-arrow-left"></i> Raingo</div>
+        <div class="header-title" onclick="switchView('view-map')" style="cursor:pointer; display: flex; align-items: center;">
+          <i class="fa-solid fa-arrow-left" style="margin-right: 15px;"></i>
+          <img src="LOGO.png" alt="Raingo Logo" style="height: 28px; transform: scale(3.5); transform-origin: left center;">
+        </div>
         <div class="header-points"><i class="fa-solid fa-droplet icon-drop"></i> 700</div>
       </div>
       <div class="coupon-grid">
@@ -622,17 +625,14 @@
 
     // ==================== 動態優惠券詳細頁邏輯 ====================
     function openCouponDetail(brand, title, color) {
-      // 替換詳細頁面的內容與顏色
       document.getElementById('detail-brand-name').innerText = brand;
       document.getElementById('detail-brand-name').style.color = color;
       document.getElementById('detail-title').innerText = title;
 
-      // 替換最後掃碼頁面的內容與顏色
       document.getElementById('success-brand-name').innerText = brand;
       document.getElementById('success-brand-name').style.color = color;
       document.getElementById('success-title').innerText = title;
 
-      // 切換到詳細頁面
       switchView('view-coupon-detail');
     }
 
@@ -660,7 +660,6 @@
     function openNumpad() { currentInput = ""; updateNumpadDisplay(); document.getElementById('overlay-numpad').classList.add('active'); }
     function closeNumpad() { document.getElementById('overlay-numpad').classList.remove('active'); }
     
-    // 修改：解除數字限制，允許自由輸入最多 3 位數以防跑版
     function inputNum(num) {
       if (currentInput.length < 3) {
         if (currentInput === "0") {
@@ -678,7 +677,6 @@
       document.getElementById('display-points').innerText = (currentInput === "" ? "0" : parseInt(currentInput) * 2) + " 點";
     }
     
-    // 修改：加上超過 5 元的彈窗警告邏輯
     function confirmRedeem() {
       if(!currentInput || currentInput === "0") return alert("請輸入金額");
       
