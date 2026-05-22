@@ -119,6 +119,34 @@
     }
     .header-points { font-size: 20px; display: flex; align-items: center; gap: 6px; }
 
+    /* 2024.12.01 用戶請求：LOGO 後模糊陰影 (光暈) */
+    .header-logo-container {
+      position: relative; /* 偽元素定位基準 */
+      display: flex;
+      align-items: center;
+      /* 將原本 img 上的 transform 移動到這裡，確保陰影也跟著動和縮放 */
+      transform: scale(3.5);
+      transform-origin: left center;
+    }
+
+    /* 模糊陰影偽元素 */
+    .header-logo-container::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* 居中 */
+      
+      /* 設置一個圓形區塊，並加上模糊。顏色使用淺綠色 (#a3d9b4) 配合透明度，模糊值要大。*/
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: rgba(163, 217, 180, 0.45); /* 用戶喜歡圖二水滴後面的淺綠陰影 */
+      filter: blur(25px); /* 大模糊創造柔和擴散 */
+      
+      z-index: -1; /* 在圖片後面 */
+    }
+
     /* 優惠券列表頁 */
     .coupon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; padding-bottom: 120px; }
     .coupon-card { background: white; border-radius: 16px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform 0.1s; }
@@ -398,8 +426,10 @@
     <div id="view-coupons" class="page-view bg-light-gray">
       <div class="raingo-header">
         <div class="header-title" onclick="switchView('view-map')" style="cursor:pointer; display: flex; align-items: center;">
-          <i class="fa-solid fa-arrow-left" style="margin-right: 15px;"></i>
-          <img src="LOGO.png" alt="Raingo Logo" style="height: 28px; transform: scale(3.5); transform-origin: left center; filter: drop-shadow(0px 0px 1.5px rgba(255, 255, 255, 0.9)) drop-shadow(0.5px 0.5px 1px rgba(0, 0, 0, 0.1));">
+          <i class="fa-solid fa-arrow-left" style="margin-right: 10px;"></i>
+          <div class="header-logo-container">
+            <img src="LOGO.png" alt="Raingo Logo" style="height: 28px; display: block;">
+          </div>
         </div>
         <div class="header-points"><i class="fa-solid fa-droplet icon-drop"></i> 700</div>
       </div>
@@ -413,7 +443,7 @@
         <div class="coupon-card" onclick="openCouponDetail('康是美', '康是美 現金抵用金', '#f57c00')"><div class="card-brand">康是美</div><div class="ticket bg-orange">現金抵用券</div><div class="card-title">康是美 現金抵用金</div></div>
         <div class="coupon-card" onclick="openCouponDetail('屈臣氏', '屈臣氏 現金抵用金', '#00838f')"><div class="card-brand">屈臣氏</div><div class="ticket bg-teal">現金抵用券</div><div class="card-title">屈臣氏 現金抵用金</div></div>
         <div class="coupon-card" onclick="openCouponDetail('星巴克', '星巴克 現金抵用金', '#00704a')"><div class="card-brand">星巴克</div><div class="ticket bg-dark-green">現金抵用券</div><div class="card-title">星巴克 現金抵用金</div></div>
-        <div class="coupon-card" onclick="openCouponDetail('麥當勞', '麥當勞 現金抵用金', '#da291c')"><div class="card-brand">麥當勞</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麥當勞 現金抵用金</div></div>
+        <div class="coupon-card" onclick="openCouponDetail('麦当劳', '麦当劳 現金抵用金', '#da291c')"><div class="card-brand">麦当劳</div><div class="ticket bg-red">現金抵用券</div><div class="card-title">麦当劳 現金抵用金</div></div>
       </div>
       <button class="charity-entry-btn" onclick="switchView('view-charity')">
         <i class="fa-solid fa-chevron-up"></i>
