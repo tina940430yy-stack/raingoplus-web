@@ -153,7 +153,9 @@
     .foundation-card { min-width: 85%; scroll-snap-align: center; background: white; border-radius: 20px; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
     .foundation-name { font-size: 22px; font-weight: bold; margin-bottom: 40px; text-align: center; height: 60px; }
     .progress-text { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-    .filling-drop { width: 220px; height: 220px; background-color: #f0f0f0; border-radius: 0 50% 50% 50%; transform: rotate(45deg); position: relative; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-top: 60px; margin-bottom: 20px; }
+    
+    /* ★ 修正：加上 flex-shrink: 0 確保水滴不會被擠壓變形 */
+    .filling-drop { flex-shrink: 0; width: 220px; height: 220px; background-color: #f0f0f0; border-radius: 0 50% 50% 50%; transform: rotate(45deg); position: relative; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); margin-top: 60px; margin-bottom: 20px; }
     
     /* 水滴反轉回水平的水位容器 */
     .water-group { position: absolute; top: 50%; left: 50%; width: 312px; height: 312px; transform: translate(-50%, -50%) rotate(-45deg); z-index: 1; }
